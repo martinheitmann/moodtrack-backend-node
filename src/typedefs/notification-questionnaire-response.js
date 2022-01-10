@@ -11,6 +11,7 @@ module.exports.NotificationQuestionnaireResponseType = gql`
     previous: ID
     next: ID
     nodeId: ID
+    node: NQNodeType
     responseData: NotificationQuestionnaireResponseDataType
   }
 `;
@@ -25,6 +26,7 @@ module.exports.NotificationQuestionnaireResponseInput = gql`
     previous: ID
     next: ID
     nodeId: ID
+    node: ID
     responseData: NotificationQuestionnaireResponseDataInput
   }
 `;

@@ -19,6 +19,10 @@ const NotificationQuestionnaireResponseSchema = new mongoose.Schema({
   previous: { type: mongoose.Types.ObjectId }, // Not used, may also be incorrect.
   next: { type: mongoose.Types.ObjectId }, // Maybe used, may also be incorrect.
   nodeId: { type: mongoose.Types.ObjectId },
+  node: {
+    type: mongoose.Types.ObjectId,
+    ref: "NQNode",
+  },
   responseData: {
     questionText: { type: String },
     choices: [
@@ -31,6 +35,8 @@ const NotificationQuestionnaireResponseSchema = new mongoose.Schema({
       },
     ],
     selectedChoice: {
+      choiceIconMd5: { type: String },
+      choiceIconId: { type: mongoose.Types.ObjectId },
       choiceIcon: { type: String },
       choiceValueType: { type: String },
       choiceValue: { type: String },
@@ -44,6 +50,7 @@ NotificationQuestionnaireResponseSchema.statics.getNotificationQuestionnaireResp
       .populate("user")
       .populate("notificationQuestionnaire")
       .populate("message")
+      .populate("node")
       .exec();
   };
 
@@ -53,6 +60,22 @@ NotificationQuestionnaireResponseSchema.statics.getNotificationQuestionnaireResp
       .populate("user")
       .populate("notificationQuestionnaire")
       .populate("message")
+      .populate("node")
+      .exec();
+  };
+
+NotificationQuestionnaireResponseSchema.statics.getNotificationQuestionnaireResponsesBetween =
+  async function (params) {
+    const gte = params.gte || new Date();
+    const lte = params.lte || new Date();
+    return await this.find({
+      user: params._id,
+      timestamp: { $gte: gte, $lte: lte },
+    })
+      .populate("user")
+      .populate("notificationQuestionnaire")
+      .populate("message")
+      .populate("node")
       .exec();
   };
 
@@ -65,6 +88,7 @@ NotificationQuestionnaireResponseSchema.statics.createNotificationQuestionnaireR
       .populate("user")
       .populate("notificationQuestionnaire")
       .populate("message")
+      .populate("node")
       .exec();
     return newDoc;
   };
@@ -75,6 +99,7 @@ NotificationQuestionnaireResponseSchema.statics.updateNotificationQuestionnaireR
       .populate("user")
       .populate("notificationQuestionnaire")
       .populate("message")
+      .populate("node")
       .exec();
   };
 

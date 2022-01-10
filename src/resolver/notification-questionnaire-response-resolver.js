@@ -14,7 +14,8 @@ module.exports.notificationQuestionnaireResponseResolvers = {
       );
     },
     notificationQuestionnaireResponses(parent, args, context, info) {
-      return Auth.requireAdmin(
+      return Auth.requireOwnership(
+        args.user || null,
         parent,
         args,
         context,
@@ -29,6 +30,16 @@ module.exports.notificationQuestionnaireResponseResolvers = {
         context,
         info,
         resolveGetNumberOfResponsesForEachDay
+      );
+    },
+    notificationQuestionnaireResponsesBetween(parent, args, context, info) {
+      return Auth.requireOwnership(
+        args._id || null,
+        parent,
+        args,
+        context,
+        info,
+        resolveNotificationQuestionnaireResponsesBetween
       );
     },
   },
@@ -150,6 +161,21 @@ const resolveGetNumberOfResponsesForEachDay = async function (
     return await NotificationQuestionnaireResponse.aggregateNumberOfResponsesEachDay(
       args.startDate,
       args.endDate
+    );
+  } catch (error) {
+    return error;
+  }
+};
+
+const resolveNotificationQuestionnaireResponsesBetween = async function (
+  parent,
+  args,
+  context,
+  info
+) {
+  try {
+    return await NotificationQuestionnaireResponse.getNotificationQuestionnaireResponsesBetween(
+      args
     );
   } catch (error) {
     return error;

@@ -167,6 +167,11 @@ const Query = gql`
     notificationQuestionnaireResponses(
       user: ID
     ): [NotificationQuestionnaireResponseType]
+    notificationQuestionnaireResponsesBetween(
+      _id: ID
+      gte: Date
+      lte: Date
+    ): [NotificationQuestionnaireResponseType]
     notificationQuestionnaireResponse(
       _id: ID
       nodeId: ID

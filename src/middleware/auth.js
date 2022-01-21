@@ -29,14 +29,11 @@ module.exports.validateToken = async function (idToken) {
       // Token has been revoked. Inform the user to reauthenticate or signOut() the user.
       throw new Error("Invalid token, sign-in required.");
     } else {
-      const error = new Error(
-        "Error during token authentication: " +
-          error.code +
-          ": " +
-          error.message
+      const mError = new Error(
+        "Token validation error: " + error.code + ": " + error.message
       );
-      logger.log({ level: "error", message: error });
-      throw error;
+      logger.log({ level: "error", message: error.code + ":" + error.message });
+      throw mError;
     }
   }
 };

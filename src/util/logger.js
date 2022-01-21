@@ -15,6 +15,10 @@ const logger = winston.createLogger({
       filename: "logs/verbose.log",
       level: "verbose",
     }),
+    new winston.transports.File({
+      filename: "logs/info.log",
+      level: "info",
+    }),
     new winston.transports.File({ filename: "logs/combined.log" }),
   ],
 });

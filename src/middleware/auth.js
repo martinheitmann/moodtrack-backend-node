@@ -32,7 +32,6 @@ module.exports.validateToken = async function (idToken) {
       const mError = new Error(
         "Token validation error: " + error.code + ": " + error.message
       );
-      logger.log({ level: "error", message: error.code + ":" + error.message });
       throw mError;
     }
   }
@@ -112,11 +111,11 @@ module.exports.requireOwnership = async function (
       if (context.credentials.claims.role === "admin") {
         return await next(parent, args, context, info);
       } else {
-        if (!context.credentials.claims.uid)
+        if (!context.credentials.uid)
           return new Error(
             "Access to resource denied, no uid attached to context."
           );
-        if (context.credentials.claims.uid === uid) {
+        if (context.credentials.uid === uid) {
           return await next(parent, args, context, info);
         } else
           return new Error(
@@ -131,7 +130,6 @@ module.exports.requireOwnership = async function (
       "An error occured during authentication and ownership verification."
     );
   } catch (error) {
-    logger.log({ level: "error", message: error });
     return error;
   }
 };

@@ -71,7 +71,10 @@ const server = new ApolloServer({
         // add the user to the context
         return { credentials: requestCredentials };
       } catch (error) {
-        console.log(error);
+        logger.log({
+          level: "info",
+          message: error,
+        });
         return { credentials: null };
       }
     }

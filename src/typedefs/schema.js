@@ -89,6 +89,7 @@ const {
   InAppQuestionnaireContentEntryInput,
   InAppQuestionnaireContentEntryType,
 } = require("./in-app-questionnaire-content-entry");
+const { PostInput, PostType } = require("./post");
 
 // Resolvers
 const { nqNodeResolvers } = require("../resolver/nq-node-resolver");
@@ -117,6 +118,7 @@ const {
   notificationQuestionnaireByTimeOfDayResolvers,
 } = require("../resolver/notification-questionnaire-by-time-of-day-resolver");
 const { rolesResolvers } = require("../resolver/roles-resolver");
+const { postResolvers } = require("../resolver/postresolver");
 
 const Query = gql`
   scalar Date
@@ -186,6 +188,8 @@ const Query = gql`
     role(uid: ID!): RoleType
     testAdmin: String
     testUser: String
+    post(_id: ID): PostType
+    posts: [PostType]
   }
 `;
 
@@ -275,6 +279,10 @@ const Mutation = gql`
     ): String
     # ----------------- Role -----------------
     grantRole(role: String, uid: ID): RoleType
+    # ----------------- Post -----------------
+    createPost(post: PostInput): PostType
+    modifyPost(_id: ID, post: PostInput): PostType
+    deletePost(_id: ID): ID
   }
 `;
 
@@ -338,6 +346,8 @@ const typeDefs = [
   InAppQuestionnaireContentEntryInput,
   InAppQuestionnaireContentEntryType,
   RoleType,
+  PostInput,
+  PostType,
 ];
 
 module.exports = makeExecutableSchema({
@@ -357,6 +367,7 @@ module.exports = makeExecutableSchema({
     notificationMessageResolvers,
     notificationQuestionnaireByTimeOfDayResolvers,
     rolesResolvers,
-    inAppQuestionnaireContentResolvers
+    inAppQuestionnaireContentResolvers,
+    postResolvers
   ),
 });

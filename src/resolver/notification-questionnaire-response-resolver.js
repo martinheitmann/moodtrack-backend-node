@@ -1,6 +1,9 @@
 const { async } = require("regenerator-runtime");
 const NotificationQuestionnaireResponse = require("../model/notificationresponse/notification-questionnaire-response");
 const Auth = require("../middleware/auth");
+const logger = require("../util/logger");
+
+const tag = "notification-questionaire-response-resolver: ";
 
 module.exports.notificationQuestionnaireResponseResolvers = {
   Query: {
@@ -86,6 +89,10 @@ const resolveNotificationQuestionnaireResponse = async function (
       args
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -101,6 +108,10 @@ const resolveNotificationQuestionnaireResponses = async function (
       args
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -116,6 +127,10 @@ const resolveCreateNotificationQuestionnaireResponse = async function (
       args.notificationQuestionnaireResponse
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -132,6 +147,10 @@ const resolveModifyNotificationQuestionnaireResponse = async function (
       args.questionnaire
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -147,6 +166,10 @@ const resolveDeleteNotificationQuestionnaireResponse = async function (
       args._id
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -163,6 +186,10 @@ const resolveGetNumberOfResponsesForEachDay = async function (
       args.endDate
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -178,6 +205,10 @@ const resolveNotificationQuestionnaireResponsesBetween = async function (
       args
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };

@@ -1,5 +1,8 @@
 const Post = require("../model/post/post");
 const Auth = require("../middleware/auth");
+const logger = require("../util/logger");
+
+const tag = "post-resolver: ";
 
 module.exports.postResolvers = {
   Query: {
@@ -39,7 +42,10 @@ const resolveCreatePost = async function (parent, args, context, info) {
   try {
     return await Post.createPost(args.post);
   } catch (error) {
-    console.log(error);
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -48,7 +54,10 @@ const resolveFindPosts = async function (parent, args, context, info) {
   try {
     return await Post.findPosts(args);
   } catch (error) {
-    console.log(error);
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -57,7 +66,10 @@ const resolveFindPost = async function (parent, args, context, info) {
   try {
     return await Post.findPost(args);
   } catch (error) {
-    console.log(error);
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -66,7 +78,10 @@ const resolveDeletePost = async function (parent, args, context, info) {
   try {
     return await Post.deletePost(args);
   } catch (error) {
-    console.log(error);
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -75,7 +90,10 @@ const resolveModifyPost = async function (parent, args, context, info) {
   try {
     return await Post.updatePost(args._id, args.post);
   } catch (error) {
-    console.log(error);
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };

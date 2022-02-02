@@ -1,6 +1,8 @@
-const { async } = require("regenerator-runtime");
 const InAppQuestionnnaireResponse = require("../model/inappquestionnaireresponse/in-app-questionnaire-response");
 const Auth = require("../middleware/auth");
+const logger = require("../util/logger");
+
+const tag = "in-app-questionnaire-response-resolvers: ";
 
 module.exports.inAppQuestionnaireResponseResolvers = {
   Query: {
@@ -66,6 +68,10 @@ const resolveInAppQuestionnaireResponse = async function (
       _id: id,
     });
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -81,6 +87,10 @@ const resolveInAppQuestionnaireResponses = async function (
       args
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -96,6 +106,10 @@ const resolveCreateInAppQuestionnaireResponse = async function (
       args.questionnaireResponse
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -112,6 +126,10 @@ const resolveModifyInAppQuestionnaireResponse = async function (
       args.questionnaire
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -124,8 +142,14 @@ const resolveDeleteInAppQuestionnaireResponse = async function (
 ) {
   try {
     const id = args._id;
-    return await InAppQuestionnnaire.deleteInAppQuestionnaireResponse(id);
+    return await InAppQuestionnnaireResponse.deleteInAppQuestionnaireResponse(
+      id
+    );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };

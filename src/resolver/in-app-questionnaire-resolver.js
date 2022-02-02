@@ -1,5 +1,8 @@
 const InAppQuestionnnaire = require("../model/inappquestionnaire/in-app-questionnaire");
 const Auth = require("../middleware/auth");
+const logger = require("../util/logger");
+
+const tag = "in-app-questionnaire-resolvers: ";
 
 /***
  * Resolver functions for in-app questionnaires.
@@ -84,6 +87,10 @@ const resolveInAppQuestionnaire = async function (parent, args, context, info) {
   try {
     return await InAppQuestionnnaire.getInAppQuestionnaire(args);
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -97,6 +104,10 @@ const resolveInAppQuestionnaires = async function (
   try {
     return await InAppQuestionnnaire.getInAppQuestionnaires(args);
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -112,6 +123,10 @@ const resolveCreateInAppQuestionnaire = async function (
       args.questionnaire
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -128,6 +143,10 @@ const resolveModifyInAppQuestionnaire = async function (
       args.questionnaire
     );
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -141,6 +160,10 @@ const resolveDeleteInAppQuestionnaire = async function (
   try {
     return await InAppQuestionnnaire.deleteInAppQuestionnaire(args);
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -157,6 +180,10 @@ const resolveArchiveInAppQuestionnaire = async function (
     });
     return args._id;
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -173,6 +200,10 @@ const resolveRestoreInAppQuestionnaire = async function (
     });
     return args._id;
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };

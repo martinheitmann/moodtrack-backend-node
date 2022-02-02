@@ -90,6 +90,8 @@ const {
   InAppQuestionnaireContentEntryType,
 } = require("./in-app-questionnaire-content-entry");
 const { PostInput, PostType } = require("./post");
+const { EventLogInput, EventLogType } = require("./event-log");
+const { EventLogExtraInput, EventLogExtraType } = require("./event-log-extra");
 
 // Resolvers
 const { nqNodeResolvers } = require("../resolver/nq-node-resolver");
@@ -118,7 +120,8 @@ const {
   notificationQuestionnaireByTimeOfDayResolvers,
 } = require("../resolver/notification-questionnaire-by-time-of-day-resolver");
 const { rolesResolvers } = require("../resolver/roles-resolver");
-const { postResolvers } = require("../resolver/postresolver");
+const { postResolvers } = require("../resolver/post-resolver");
+const { eventLogResolvers } = require("../resolver/event-log-resolver");
 
 const Query = gql`
   scalar Date
@@ -190,6 +193,8 @@ const Query = gql`
     testUser: String
     post(_id: ID): PostType
     posts: [PostType]
+    eventLog(_id: ID): EventLogType
+    eventLogs(_id: ID, actor: ID): [EventLogType]
   }
 `;
 
@@ -283,6 +288,10 @@ const Mutation = gql`
     createPost(post: PostInput): PostType
     modifyPost(_id: ID, post: PostInput): PostType
     deletePost(_id: ID): ID
+    # ----------------- Event Log -----------------
+    createEventLog(_id: ID!, eventLog: EventLogInput!): EventLogType
+    modifyEventLog(_id: ID!, eventLog: EventLogInput!): EventLogType
+    deleteEventLog(_id: ID!): ID
   }
 `;
 
@@ -348,6 +357,10 @@ const typeDefs = [
   RoleType,
   PostInput,
   PostType,
+  EventLogType,
+  EventLogInput,
+  EventLogExtraInput,
+  EventLogExtraType,
 ];
 
 module.exports = makeExecutableSchema({
@@ -368,6 +381,7 @@ module.exports = makeExecutableSchema({
     notificationQuestionnaireByTimeOfDayResolvers,
     rolesResolvers,
     inAppQuestionnaireContentResolvers,
-    postResolvers
+    postResolvers,
+    eventLogResolvers
   ),
 });

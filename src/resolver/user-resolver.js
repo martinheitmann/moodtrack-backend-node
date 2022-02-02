@@ -2,6 +2,8 @@ const User = require("../model/user/user");
 const Auth = require("../middleware/auth");
 const logger = require("../util/logger");
 
+const tag = "user-resolver: ";
+
 module.exports.userResolvers = {
   Query: {
     async user(parent, args, context, info) {
@@ -63,7 +65,7 @@ const resolveUnregisterUser = async function (parent, args, context, info) {
   } catch (error) {
     logger.log({
       level: "error",
-      message: error,
+      message: tag + error,
     });
     return error;
   }
@@ -76,10 +78,9 @@ const resolveCreateUser = async function (parent, args, context, info) {
     console.log(params.creationDate);
     return await User.createUser(params);
   } catch (error) {
-    console.log(error);
     logger.log({
       level: "error",
-      message: error,
+      message: tag + error,
     });
     return error;
   }
@@ -93,10 +94,9 @@ const resolveFindUser = async function (parent, args, context, info) {
       return await User.findUserByEmail(args.email);
     } else throw new Error("No valid/usable args for finding user");
   } catch (error) {
-    console.log(error);
     logger.log({
       level: "error",
-      message: error,
+      message: tag + error,
     });
     return error;
   }
@@ -106,10 +106,9 @@ const resolveFindUsers = async function (parent, args, context, info) {
   try {
     return await User.findUsers(args);
   } catch (error) {
-    console.log(error);
     logger.log({
       level: "error",
-      message: error,
+      message: tag + error,
     });
     return error;
   }
@@ -124,10 +123,9 @@ module.exports.resolveFindAllUsers = async function (
   try {
     return await User.fetchAllUsers();
   } catch (error) {
-    console.log(error);
     logger.log({
       level: "error",
-      message: error,
+      message: tag + error,
     });
     return error;
   }
@@ -139,10 +137,9 @@ const resolveModifyUser = async function (parent, args, context, info) {
     const params = args.user;
     return await User.updateUser(_id, params);
   } catch (error) {
-    console.log(error);
     logger.log({
       level: "error",
-      message: error,
+      message: tag + error,
     });
     return error;
   }

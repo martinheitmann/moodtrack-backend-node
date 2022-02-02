@@ -1,20 +1,40 @@
 const Notification = require("../push/notification");
 const NotificationMessage = require("../model/notificationmessage/notification-message");
+const Auth = require("../middleware/auth");
 const logger = require("../util/logger");
+
+const tag = "notification-message-resolver: ";
 
 module.exports.notificationMessageResolvers = {
   Query: {},
   Mutation: {
     sendNotificationMessage(parent, args, context, info) {
-      return resolveSendNotificationQuestionnaire(args);
+      return Auth.requireAdmin(
+        parent,
+        args,
+        context,
+        info,
+        resolveSendNotificationQuestionnaire
+      );
     },
     sendNotificationTextMessage(parent, args, context, info) {
-      return resolveSendNotificationQuestionnaire(args);
+      return Auth.requireAdmin(
+        parent,
+        args,
+        context,
+        info,
+        resolveSendTextNotification
+      );
     },
   },
 };
 
-const resolveSendTextNotification = async function (args) {
+const resolveSendTextNotification = async function (
+  parent,
+  args,
+  context,
+  info
+) {
   try {
     const title = args.title;
     const body = args.body;
@@ -33,13 +53,21 @@ const resolveSendTextNotification = async function (args) {
     } else {
       return new Error("Error validating message parameters");
     }
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return error;
   }
 };
 
-const resolveSendNotificationQuestionnaire = async function (args) {
+const resolveSendNotificationQuestionnaire = async function (
+  parent,
+  args,
+  context,
+  info
+) {
   try {
     const isDryRun = args.notificationMessage.isDryRun;
     const notificationMessage = args.notificationMessage;
@@ -66,11 +94,14 @@ const resolveSendNotificationQuestionnaire = async function (args) {
       );
       return result;
     } else {
-      return new Error("Error validating message parameters");
+      throw new Error("Error validating message parameters");
     }
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return error;
   }
 };
 
@@ -85,9 +116,12 @@ const storeSentMessage = async function (userId, nqId) {
       message
     );
     return messageId;
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return error;
   }
 };
 
@@ -103,8 +137,11 @@ const storeSentTextMessage = async function (userId, title, body) {
       message
     );
     return messageId;
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return error;
   }
 };

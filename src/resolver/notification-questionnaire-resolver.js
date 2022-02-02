@@ -2,6 +2,8 @@ const NotificationQuestionnaire = require("../model/nqgraph/notification-questio
 const Auth = require("../middleware/auth");
 const logger = require("../util/logger");
 
+const tag = "notification-questionaire-resolver: ";
+
 module.exports.notificationQuestionnaireResolvers = {
   Query: {
     notificationQuestionnaire(parent, args, context, info) {
@@ -104,7 +106,10 @@ const resolveRestoreNotificationQuestionnaire = async function (
     );
     return result._id;
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -123,7 +128,10 @@ const resolveArchiveNotificationQuestionnaire = async function (
     );
     return result._id;
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -139,7 +147,10 @@ const resolveRemoveUserFromNotificationQuestionnaire = async function (
     const userId = args.userId;
     return NotificationQuestionnaire.removeUser(nqId, userId);
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -155,7 +166,10 @@ const resolveEnrollUserInNotificationQuestionnaire = async function (
     const userId = args.userId;
     return NotificationQuestionnaire.addUser(nqId, userId);
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -170,7 +184,10 @@ const resolveNotificationQuestionnaire = async function (
     const id = args._id;
     return NotificationQuestionnaire.findNotificationQuestionnaireById(id);
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -184,7 +201,10 @@ const resolveNotificationQuestionnaires = async function (
   try {
     return NotificationQuestionnaire.getNotificationQuestionnaires(args);
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -201,7 +221,10 @@ const resolveCreateNotificationQuestionnaire = async function (
       notificationQuestionnaire
     );
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -220,7 +243,10 @@ const resolveModifyNotificationQuestionnaire = async function (
       notificationQuestionnaire
     );
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -234,7 +260,10 @@ const resolveDeleteNotificationQuestionnaire = async function (
   try {
     return NotificationQuestionnaire.deleteOneNotificationQuestionnaire(args);
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };

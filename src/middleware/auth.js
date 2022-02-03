@@ -2,6 +2,8 @@ const admin = require("firebase-admin");
 const User = require("../model/user/user");
 const logger = require("../util/logger");
 
+const tag = "auth: ";
+
 // These emails may be used for admin accounts.
 const forbiddenUserEmails = ["moodtrackadmin@moodtrack.com"];
 
@@ -164,7 +166,7 @@ module.exports.requireAdmin = async function (
       return new Error("Access to resource denied, admin role required.");
     } else return await next(parent, args, context, info);
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({ level: "error", message: tag + error });
     return error;
   }
 };
@@ -201,7 +203,7 @@ module.exports.requireAuthentication = async function (
       return await next(parent, args, context, info);
     }
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({ level: "error", message: tag + error });
     return error;
   }
 };
@@ -231,8 +233,9 @@ module.exports.registerNewUser = async function (args) {
 
     if (userRecord) {
       // Registration succeeded
-      const customClaims = { role: "user" };
-      await admin.auth().setCustomUserClaims(userRecord.uid, customClaims);
+      /*const customClaims = { role: "user" };
+      /await admin.auth().setCustomUserClaims(userRecord.uid, customClaims);*/
+      await exports.grantUserRole(userRecord.uid);
 
       const newUser = {
         _id: userRecord.uid,
@@ -249,7 +252,10 @@ module.exports.registerNewUser = async function (args) {
     // we have to consider both cases. The most likely case is
     // successful registration with the admin SDK and a database failure,
     // meaning we should remove the firebase user in case of a failure
-    console.log(error);
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     if (error.code == "auth/email-already-exists") {
       return new Error("The provided e-mail already exists");
     } else if (error.code == "auth/invalid-email") {
@@ -290,7 +296,7 @@ module.exports.getAllUsers = async function () {
     }
     return allUsers;
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({ level: "error", message: tag + error });
     return error;
   }
 };
@@ -368,7 +374,7 @@ module.exports.deleteUserFromDbAndAuth = async function (uid) {
       throw new Error("Either database or FB Auth user could not be found.");
     }
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({ level: "error", message: tag + error });
     return error;
   }
 };

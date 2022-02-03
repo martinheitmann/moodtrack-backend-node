@@ -107,28 +107,40 @@ module.exports.requireOwnership = async function (
   try {
     if (process.env.NODE_ENV == "production") {
       if (!context.credentials.claims || !context.credentials.claims.role)
-        return new Error(
+        throw new Error(
           "Access to resource denied, no role attached to context."
         );
       if (context.credentials.claims.role === "admin") {
         return await next(parent, args, context, info);
       } else {
-        if (!context.credentials.uid)
-          return new Error(
+        if (!context.credentials.uid) {
+          const error = new Error(
             "Access to resource denied, no uid attached to context."
           );
+          logger.log({ level: "error", message: tag + error });
+          throw error;
+        }
         if (context.credentials.uid === uid) {
           return await next(parent, args, context, info);
-        } else
-          return new Error(
+        } else {
+          const error = new Error(
             "Access to resource denied, uid does not match the requested resource."
           );
+          logger.log({
+            level: "error",
+            message:
+              tag +
+              error +
+              `(query: ${uid}, credentials: ${context.credentials.uid})`,
+          });
+          throw error;
+        }
       }
     }
     if (process.env.NODE_ENV == "development") {
       return next(parent, args, context, info);
     }
-    return new Error(
+    throw new Error(
       "An error occured during authentication and ownership verification."
     );
   } catch (error) {

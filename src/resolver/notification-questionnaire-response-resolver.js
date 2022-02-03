@@ -49,7 +49,7 @@ module.exports.notificationQuestionnaireResponseResolvers = {
   Mutation: {
     createNotificationQuestionnaireResponse(parent, args, context, info) {
       return Auth.requireOwnership(
-        args.user || null,
+        args.notificationQuestionnaireResponse.user || null,
         parent,
         args,
         context,

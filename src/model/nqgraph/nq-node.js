@@ -14,60 +14,32 @@ const NQNodeSchema = new mongoose.Schema({
 });
 
 NQNodeSchema.statics.getAllNodes = async function () {
-  try {
-    return await this.find({});
-  } catch (err) {
-    return err;
-  }
+  return await this.find({});
 };
 
 NQNodeSchema.statics.getNodes = async function (params) {
-  try {
-    return await this.find(params || {});
-  } catch (err) {
-    return err;
-  }
+  return await this.find(params || {});
 };
 
 NQNodeSchema.statics.findNode = async function (params) {
-  try {
-    return await this.findOne(params);
-  } catch (err) {
-    return err;
-  }
+  return await this.findOne(params);
 };
 
 NQNodeSchema.statics.findNodeById = async function (id) {
-  try {
-    return await this.findById(id);
-  } catch (err) {
-    return err;
-  }
+  return await this.findById(id);
 };
 
 NQNodeSchema.statics.createNode = async function (params) {
-  try {
-    return await this.create(params);
-  } catch (err) {
-    return err;
-  }
+  return await this.create(params);
 };
 
 NQNodeSchema.statics.updateNode = async function (id, params) {
-  try {
-    return await this.findOneAndUpdate({ _id: id }, params, { new: true });
-  } catch (err) {
-    return err;
-  }
+  return await this.findOneAndUpdate({ _id: id }, params, { new: true });
 };
 
 NQNodeSchema.statics.deleteNode = async function (params) {
-  try {
-    await this.deleteOne(params);
-    return params._id || null;
-  } catch (err) {
-    return err;
-  }
+  await this.deleteOne(params);
+  return params._id || null;
 };
 
 module.exports = mongoose.model("NQNode", NQNodeSchema);

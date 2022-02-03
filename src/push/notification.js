@@ -1,15 +1,17 @@
 const admin = require("firebase-admin");
 const logger = require("../util/logger");
 
+const tag = "notification: ";
+
 function successLogger(result) {
   logger.log({
     level: "verbose",
-    message: "Successfully sent message with id " + result,
+    message: tag + "Successfully sent message with id " + result,
   });
 }
 
 function errorLogger(error) {
-  logger.log({ level: "error", message: error });
+  logger.log({ level: "error", message: tag + error });
 }
 
 /*

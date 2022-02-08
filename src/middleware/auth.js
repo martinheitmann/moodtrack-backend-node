@@ -32,7 +32,10 @@ module.exports.validateToken = async function (idToken) {
   } catch (error) {
     if (error.code == "auth/id-token-revoked") {
       // Token has been revoked. Inform the user to reauthenticate or signOut() the user.
-      throw new AuthenticationError("Invalid token, sign-in required.");
+      throw new AuthenticationError("Invalid session, sign-in required.");
+    } else if (error.code === "auth/user-disabled") {
+      // User has been disaled
+      throw new AuthenticationError("The user has been disabled.");
     } else {
       const mError = new AuthenticationError(
         "Token validation error: " + error.code + ": " + error.message

@@ -49,28 +49,20 @@ const InAppQuestionnaireResponseSchema = new mongoose.Schema({
 
 InAppQuestionnaireResponseSchema.statics.getInAppQuestionnaireResponse =
   async function (params) {
-    try {
-      return await this.findOne(params)
-        .populate("user")
-        .populate("questionnaire")
-        .populate("message")
-        .exec();
-    } catch (error) {
-      return error;
-    }
+    return await this.findOne(params)
+      .populate("user")
+      .populate("questionnaire")
+      .populate("message")
+      .exec();
   };
 
 InAppQuestionnaireResponseSchema.statics.getInAppQuestionnaireResponses =
   async function (params) {
-    try {
-      return await this.find(params || {})
-        .populate("user")
-        .populate("questionnaire")
-        .populate("message")
-        .exec();
-    } catch (error) {
-      return error;
-    }
+    return await this.find(params || {})
+      .populate("user")
+      .populate("questionnaire")
+      .populate("message")
+      .exec();
   };
 
 InAppQuestionnaireResponseSchema.statics.createInAppQuestionnaireResponse =

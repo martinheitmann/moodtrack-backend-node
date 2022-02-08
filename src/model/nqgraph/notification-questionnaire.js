@@ -28,7 +28,7 @@ NotificationQuestionnaireSchema.statics.removeUser = async function (
       // Array is either null or empty, return or throw error.
       await session.abortTransaction();
       session.endSession();
-      return new Error(
+      throw new Error(
         "Delete failed, user isn't defined or there are no users to delete."
       );
     } else if (enrolledUsers.includes(userId)) {
@@ -108,79 +108,47 @@ NotificationQuestionnaireSchema.statics.addUser = async function (
 
 NotificationQuestionnaireSchema.statics.getAllNotificationQuestionnaires =
   async function () {
-    try {
-      return await this.find({}).populate("enrolledUsers").exec();
-    } catch (err) {
-      return err;
-    }
+    return await this.find({}).populate("enrolledUsers").exec();
   };
 
 NotificationQuestionnaireSchema.statics.getNotificationQuestionnaires =
   async function (params) {
-    try {
-      return await this.find(params).populate("enrolledUsers").exec();
-    } catch (err) {
-      return err;
-    }
+    return await this.find(params).populate("enrolledUsers").exec();
   };
 
 NotificationQuestionnaireSchema.statics.findNotificationQuestionnaire =
   async function (params) {
-    try {
-      return await this.findOne(params).populate("enrolledUsers").exec();
-    } catch (err) {
-      return err;
-    }
+    return await this.findOne(params).populate("enrolledUsers").exec();
   };
 
 NotificationQuestionnaireSchema.statics.findNotificationQuestionnaireById =
   async function (id) {
-    try {
-      return await this.findById(id).populate("enrolledUsers").exec();
-    } catch (err) {
-      return err;
-    }
+    return await this.findById(id).populate("enrolledUsers").exec();
   };
 
 NotificationQuestionnaireSchema.statics.createNotificationQuestionnaire =
   async function (params) {
-    try {
-      return await this.create(params);
-    } catch (err) {
-      return err;
-    }
+    return await this.create(params);
   };
 
 NotificationQuestionnaireSchema.statics.updateNotificationQuestionnaire =
   async function (id, params) {
-    try {
-      return await this.findOneAndUpdate({ _id: id }, params, {
-        new: true,
-      })
-        .populate("enrolledUsers")
-        .exec();
-    } catch (err) {
-      return err;
-    }
+    return await this.findOneAndUpdate({ _id: id }, params, {
+      new: true,
+    })
+      .populate("enrolledUsers")
+      .exec();
   };
 
 NotificationQuestionnaireSchema.statics.deleteOneNotificationQuestionnaire =
   async function (params) {
-    try {
-      await this.deleteOne(params);
-      return params._id || null;
-    } catch (err) {
-      return err;
-    }
+    await this.deleteOne(params);
+    return params._id || null;
   };
 
 NotificationQuestionnaireSchema.statics.deleteManyOneNotificationQuestionnaires =
   async function (params) {
-    try {
-      return await this.deleteMany(params);
-    } catch (err) {
-      return err;
-    }
+    return await this.deleteMany(params);
   };
 
 module.exports = mongoose.model(

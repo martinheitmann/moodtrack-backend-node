@@ -4,6 +4,8 @@ const ObjectId = mongoose.Types.ObjectId;
 const Auth = require("../middleware/auth");
 const logger = require("../util/logger");
 
+const tag = "icon-resolvers: ";
+
 module.exports.iconResolvers = {
   Query: {
     icons(parent, args, context, info) {
@@ -77,9 +79,12 @@ const resolveUploadIcon = async function (parent, { file }, context, info) {
         .on("finish", resolve);
     });
     return { filename, mimetype, encoding };
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return error;
   }
 };
 
@@ -118,9 +123,12 @@ const resolveFindIcons = async function (parent, args, context, info) {
       });
     }
     return newFiles;
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return error;
   }
 };
 
@@ -136,9 +144,12 @@ const resolveDeleteIcon = async function (
     });
     bucket.delete(new ObjectId(_id));
     return _id;
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return error;
   }
 };
 
@@ -178,9 +189,12 @@ const resolveFindIcon = async function (parent, { _id }, context, info) {
       md5: file.md5,
       data: buffer.toString("base64"),
     };
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return error;
   }
 };
 
@@ -226,9 +240,12 @@ const resolveFindIconByName = async function (
       md5: file.md5,
       data: imageData.toString("base64"),
     };
-  } catch (err) {
-    logger.log({ level: "error", message: err });
-    return err;
+  } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
+    return Error;
   }
 };
 

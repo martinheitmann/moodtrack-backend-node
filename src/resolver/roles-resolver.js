@@ -1,4 +1,7 @@
 const Auth = require("../middleware/auth");
+const logger = require("../util/logger");
+
+const tag = "roles-resolver: ";
 
 module.exports.rolesResolvers = {
   Query: {
@@ -32,6 +35,10 @@ const resolveRoles = async function (parent, args, context, info) {
   try {
     return await Auth.getAllUsers();
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -41,6 +48,10 @@ const resolveRole = async function (parent, args, context, info) {
     const uid = args.uid;
     return await Auth.getAuthUserByUid(uid);
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -60,7 +71,10 @@ const resolveGrantRole = async function (parent, args, context, info) {
       return await Auth.getAuthUserByUid(uid);
     }
   } catch (error) {
-    console.log(error);
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };

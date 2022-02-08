@@ -6,6 +6,8 @@ const GraphUtils = require("../util/graph-utils");
 const Auth = require("../middleware/auth");
 const logger = require("../util/logger");
 
+const tag = "notification-questionaire-btod-resolver: ";
+
 module.exports.notificationQuestionnaireByTimeOfDayResolvers = {
   Query: {
     notificationQuestionnaireByTimeOfDay(parent, args, context, info) {
@@ -78,7 +80,10 @@ const getNotificationQuestionnaireGraph = async function (
         const error = new Error(
           "Cannot proceed with a graph which contains a cycle."
         );
-        logger.log({ level: "error", message: error });
+        logger.log({
+          level: "error",
+          message: tag + error,
+        });
         return error;
       }
       // Find the connected components only.
@@ -102,14 +107,20 @@ const getNotificationQuestionnaireGraph = async function (
       const error = new Error(
         `No root node found for questionnaire ${notificationQuestionnaireId}.`
       );
-      logger.log({ level: "error", message: error });
+      logger.log({
+        level: "error",
+        message: tag + error,
+      });
       return error;
     }
   } else {
     const error = new Error(
       `Could not find the notification questionnaire for ${notificationQuestionnaireId}.`
     );
-    logger.log({ level: "error", message: error });
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };

@@ -1,6 +1,7 @@
 const admin = require("firebase-admin");
 const User = require("../model/user/user");
 const logger = require("../util/logger");
+const { AuthenticationError, ForbiddenError } = require("apollo-server-errors");
 
 const tag = "auth: ";
 
@@ -20,18 +21,23 @@ module.exports.validateToken = async function (idToken) {
     const uid = payload.uid;
     const claims = { role: payload.role };
     if (!uid) {
-      throw new Error("Couldn't fetch a uid from the decoded token.");
+      throw new AuthenticationError(
+        "Couldn't fetch a uid from the decoded token."
+      );
     }
     if (!claims) {
-      throw new Error("Claims missing from decoded token.");
+      throw new AuthenticationError("Claims missing from decoded token.");
     }
     return { uid: uid, claims: claims };
   } catch (error) {
     if (error.code == "auth/id-token-revoked") {
       // Token has been revoked. Inform the user to reauthenticate or signOut() the user.
-      throw new Error("Invalid token, sign-in required.");
+      throw new AuthenticationError("Invalid session, sign-in required.");
+    } else if (error.code === "auth/user-disabled") {
+      // User has been disaled
+      throw new AuthenticationError("The user has been disabled.");
     } else {
-      const mError = new Error(
+      const mError = new AuthenticationError(
         "Token validation error: " + error.code + ": " + error.message
       );
       throw mError;
@@ -107,28 +113,40 @@ module.exports.requireOwnership = async function (
   try {
     if (process.env.NODE_ENV == "production") {
       if (!context.credentials.claims || !context.credentials.claims.role)
-        return new Error(
+        throw new ForbiddenError(
           "Access to resource denied, no role attached to context."
         );
       if (context.credentials.claims.role === "admin") {
         return await next(parent, args, context, info);
       } else {
-        if (!context.credentials.uid)
-          return new Error(
+        if (!context.credentials.uid) {
+          const error = new ForbiddenError(
             "Access to resource denied, no uid attached to context."
           );
+          logger.log({ level: "error", message: tag + error });
+          throw error;
+        }
         if (context.credentials.uid === uid) {
           return await next(parent, args, context, info);
-        } else
-          return new Error(
+        } else {
+          const error = new ForbiddenError(
             "Access to resource denied, uid does not match the requested resource."
           );
+          logger.log({
+            level: "error",
+            message:
+              tag +
+              error +
+              `(query: ${uid}, credentials: ${context.credentials.uid})`,
+          });
+          throw error;
+        }
       }
     }
     if (process.env.NODE_ENV == "development") {
       return next(parent, args, context, info);
     }
-    return new Error(
+    throw new AuthenticationError(
       "An error occured during authentication and ownership verification."
     );
   } catch (error) {
@@ -158,16 +176,20 @@ module.exports.requireAdmin = async function (
     if (process.env.NODE_ENV == "production") {
       console.log(JSON.stringify(context));
       if (!context.credentials.claims || !context.credentials.claims.role)
-        return new Error(
+        throw new ForbiddenError(
           "Access to resource denied, no role attached to context."
         );
       if (context.credentials.claims.role === "admin")
         return await next(parent, args, context, info);
-      return new Error("Access to resource denied, admin role required.");
+      return new ForbiddenError(
+        "Access to resource denied, admin role required."
+      );
     } else return await next(parent, args, context, info);
   } catch (error) {
     logger.log({ level: "error", message: tag + error });
-    return error;
+    return AuthenticationError(
+      "An error occured during request authentication."
+    );
   }
 };
 
@@ -192,19 +214,25 @@ module.exports.requireAuthentication = async function (
   try {
     if (process.env.NODE_ENV == "production") {
       if (!context.credentials.claims || !context.credentials.claims.role)
-        return new Error("Access to resource denied, no role attached.");
+        return new ForbiddenError(
+          "Access to resource denied, no role attached."
+        );
       if (
         context.credentials.claims.role === "user" ||
         context.credentials.claims.role === "admin"
       )
         return await next(parent, args, context, info);
-      return new Error("Access to resource denied, admin role required.");
+      return new ForbiddenError(
+        "Access to resource denied, admin role required."
+      );
     } else {
       return await next(parent, args, context, info);
     }
   } catch (error) {
     logger.log({ level: "error", message: tag + error });
-    return error;
+    return AuthenticationError(
+      "An error occured during request authentication."
+    );
   }
 };
 

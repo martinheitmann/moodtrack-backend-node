@@ -6,6 +6,8 @@ const NotificationMessage = require("../model/notificationmessage/notification-m
 const moment = require("moment-timezone");
 const logger = require("../util/logger");
 
+const tag = "notification-job: ";
+
 module.exports.startPushNotificationJob = function (cronJobPattern) {
   logger.log({
     level: "info",
@@ -87,8 +89,8 @@ module.exports.startPushNotificationJob = function (cronJobPattern) {
           message: `Sent ${notificationCount} notifications.`,
         });
       }
-    } catch (err) {
-      logger.log({ level: "error", message: err });
+    } catch (error) {
+      logger.log({ level: "error", message: tag + error });
     }
   });
 };
@@ -158,7 +160,7 @@ function rootNodeExistsForTime(minute, hour, nodes) {
     }
     return false;
   } catch (error) {
-    logger.log({ level: "error", message: error });
+    logger.log({ level: "error", message: tag + error });
     return false;
   }
 }

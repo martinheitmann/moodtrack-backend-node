@@ -1,6 +1,9 @@
 const NQNode = require("../model/nqgraph/nq-node");
 const NQEdge = require("../model/nqgraph/nq-edge");
 const Auth = require("../middleware/auth");
+const logger = require("../util/logger");
+
+const tag = "nq-node-resolver: ";
 
 /**
  * Resolver functions for notification questionnaire nodes.
@@ -58,6 +61,10 @@ const resolveCreateNqNode = async function (parent, args, context, info) {
   try {
     return await NQNode.createNode(args.node);
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -68,6 +75,10 @@ const resolveEditNqNode = async function (parent, args, context, info) {
     const node = args.node;
     return await NQNode.updateNode(id, node);
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -76,6 +87,10 @@ const resolveGetNqNode = async function (parent, args, context, info) {
   try {
     return await NQNode.findNode(args);
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -84,6 +99,10 @@ const resolveGetNqNodes = async function (parent, args, context, info) {
   try {
     return await NQNode.getNodes(args);
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -119,6 +138,10 @@ const resolveDeleteNqNode = async function (parent, args, context, info) {
     await NQNode.deleteNode(args);
     return args._id || null;
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };
@@ -156,6 +179,10 @@ const resolveArchiveNqNode = async function (parent, args, context, info) {
     await NQNode.updateNode(nodeId, { isArchived: true });
     return args._id || null;
   } catch (error) {
+    logger.log({
+      level: "error",
+      message: tag + error,
+    });
     return error;
   }
 };

@@ -58,7 +58,8 @@ module.exports.startPushNotificationJob = function (cronJobPattern) {
                 ) {
                   const user = activeNotificationQuestionnaire.enrolledUsers[j];
                   const userToken = user.fcmRegistrationToken;
-                  if (userToken) {
+                  const acceptsNotifications = user.notificationsEnabled;
+                  if (userToken && acceptsNotifications) {
                     const messageLog = await storeSentMessage(
                       user._id,
                       activeNotificationQuestionnaire._id

@@ -1,4 +1,3 @@
-const { async } = require("regenerator-runtime");
 const NotificationQuestionnaireResponse = require("../model/notificationresponse/notification-questionnaire-response");
 const Auth = require("../middleware/auth");
 const logger = require("../util/logger");

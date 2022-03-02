@@ -121,6 +121,7 @@ const {
 const { rolesResolvers } = require("../resolver/roles-resolver");
 const { postResolvers } = require("../resolver/postresolver");
 const { documentResolvers } = require("../resolver/document-resolver");
+const { csvResolvers } = require("../resolver/csv-resolver");
 
 const Query = gql`
   scalar Date
@@ -199,6 +200,8 @@ const Query = gql`
     documentsById(fileIds: [String]): [DocumentFileType]
     documentByOwner(_id: ID!, ownerId: ID!): DocumentFileType
     documentsByOwner(ownerId: ID!): [DocumentFileType]
+    userNotificationQuestionnaireResponsesCsv(userId: ID!): DocumentFileType
+    userInAppQuestionnaireResponsesCsv(userId: ID!): DocumentFileType
   }
 `;
 
@@ -382,6 +385,7 @@ module.exports = makeExecutableSchema({
     rolesResolvers,
     inAppQuestionnaireContentResolvers,
     postResolvers,
-    documentResolvers
+    documentResolvers,
+    csvResolvers
   ),
 });

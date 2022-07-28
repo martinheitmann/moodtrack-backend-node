@@ -31,7 +31,6 @@
     "mongoose": "^5.12.11",
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.7",
-    "passport": "^0.4.1",
     "regenerator-runtime": "^0.13.7",
     "winston": "^3.3.3"
   },

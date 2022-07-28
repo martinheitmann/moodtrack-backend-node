@@ -24,6 +24,7 @@
     "graphql-upload": "^11.0.0",
     "gridfs-stream": "^1.1.1",
     "intl": "^1.2.5",
+    "json2csv": "^5.0.7",
     "lodash": "^4.17.21",
     "moment-timezone": "^0.5.34",
     "mongodb-memory-server": "^8.0.2",

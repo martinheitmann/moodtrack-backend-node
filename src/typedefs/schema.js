@@ -90,6 +90,7 @@ const {
   InAppQuestionnaireContentEntryType,
 } = require("./in-app-questionnaire-content-entry");
 const { PostInput, PostType } = require("./post");
+const { DocumentFileType } = require("./document-file");
 
 // Resolvers
 const { nqNodeResolvers } = require("../resolver/nq-node-resolver");
@@ -119,6 +120,8 @@ const {
 } = require("../resolver/notification-questionnaire-by-time-of-day-resolver");
 const { rolesResolvers } = require("../resolver/roles-resolver");
 const { postResolvers } = require("../resolver/postresolver");
+const { documentResolvers } = require("../resolver/document-resolver");
+const { csvResolvers } = require("../resolver/csv-resolver");
 
 const Query = gql`
   scalar Date
@@ -190,6 +193,15 @@ const Query = gql`
     testUser: String
     post(_id: ID): PostType
     posts: [PostType]
+    documents: [DocumentFileType]
+    document(_id: ID): DocumentFileType
+    documentByName(filename: String): DocumentFileType
+    documentsByName(filenames: [String]): [DocumentFileType]
+    documentsById(fileIds: [String]): [DocumentFileType]
+    documentByOwner(_id: ID!, ownerId: ID!): DocumentFileType
+    documentsByOwner(ownerId: ID!): [DocumentFileType]
+    userNotificationQuestionnaireResponsesCsv(userId: ID!): DocumentFileType
+    userInAppQuestionnaireResponsesCsv(userId: ID!): DocumentFileType
   }
 `;
 
@@ -283,6 +295,9 @@ const Mutation = gql`
     createPost(post: PostInput): PostType
     modifyPost(_id: ID, post: PostInput): PostType
     deletePost(_id: ID): ID
+    # ----------------- Document -----------------
+    uploadDocument(file: Upload!, ownerId: ID!): UploadResultType
+    deleteDocument(_id: ID!, ownerId: ID!): ID
   }
 `;
 
@@ -348,6 +363,7 @@ const typeDefs = [
   RoleType,
   PostInput,
   PostType,
+  DocumentFileType,
 ];
 
 module.exports = makeExecutableSchema({
@@ -368,6 +384,8 @@ module.exports = makeExecutableSchema({
     notificationQuestionnaireByTimeOfDayResolvers,
     rolesResolvers,
     inAppQuestionnaireContentResolvers,
-    postResolvers
+    postResolvers,
+    documentResolvers,
+    csvResolvers
   ),
 });
